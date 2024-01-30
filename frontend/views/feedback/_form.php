@@ -9,7 +9,6 @@ use yii\widgets\ActiveForm;
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-
 <div class="br-pagebody mg-t-5 pd-x-30">
     <div class="br-section-wrapper">
         <h6 class="tx-gray-800 tx-uppercase tx-bold tx-14 mg-b-10">Top Label Layout</h6>

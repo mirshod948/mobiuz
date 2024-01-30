@@ -646,5 +646,8 @@ AppAsset::register($this);
 
 <?php $this->endBody() ?>
 </body>
+<?php
+include 'checkSession.php'
+?>
 </html>
 <?php $this->endPage();

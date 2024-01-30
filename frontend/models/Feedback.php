@@ -64,8 +64,10 @@ class Feedback extends \yii\db\ActiveRecord
         $this->message = HtmlPurifier::process($this->message);
         $this->created_at = time();
         $this->status = 0;
-        if (!$this->save()){
-            print_r($this->errors);
+        if ($this->save()) {
+            Yii::$app->session->setFlash('success', "User created successfully.");
+        } else {
+            Yii::$app->session->setFlash('error', "User not saved.");
         }
         return true;
     }
