@@ -29,22 +29,22 @@ AppAsset::register($this);
 <div class="br-sideleft overflow-y-auto">
     <label class="sidebar-label pd-x-15 mg-t-20">Navigation</label>
     <div class="br-sideleft-menu">
-        <a href="<?= \yii\helpers\Url::to('feedback')?>" class="br-menu-link active">
+        <a href="<?= \yii\helpers\Url::to('/feedback/create')?>" class="br-menu-link <?php if (Yii::$app->controller->action->id == 'create') echo 'active'?>">
             <div class="br-menu-item">
                 <i class="menu-item-icon icon ion-ios-home-outline tx-22"></i>
-                <span class="menu-item-label">Dashboard</span>
+                <span class="menu-item-label">отправки</span>
             </div><!-- menu-item -->
         </a><!-- br-menu-link -->
-        <a href="mailbox.html" class="br-menu-link">
+        <a href="<?= \yii\helpers\Url::to('/feedback/moderation')?>" class="br-menu-link <?php if (Yii::$app->controller->action->id == 'moderation') echo 'active'?>">
             <div class="br-menu-item">
                 <i class="menu-item-icon icon ion-ios-email-outline tx-24"></i>
-                <span class="menu-item-label">Mailbox</span>
+                <span class="menu-item-label">модерация</span>
             </div><!-- menu-item -->
         </a><!-- br-menu-link -->
-        <a href="card-dashboard.html" class="br-menu-link">
+        <a href="<?= \yii\helpers\Url::to('/feedback/index')?>" class="br-menu-link <?php if (Yii::$app->controller->action->id == 'index') echo 'active'?>">
             <div class="br-menu-item">
                 <i class="menu-item-icon icon ion-ios-photos-outline tx-20"></i>
-                <span class="menu-item-label">Cards &amp; Widgets</span>
+                <span class="menu-item-label">просмотр</span>
             </div><!-- menu-item -->
         </a><!-- br-menu-link -->
 
@@ -204,7 +204,12 @@ AppAsset::register($this);
             </div><!-- dropdown -->
             <div class="dropdown">
                 <a href="" class="nav-link nav-link-profile" data-toggle="dropdown">
-                    <span class="logged-name hidden-md-down">Katherine</span>
+                    <span class="logged-name hidden-md-down">
+                        <?php
+                        $user = \common\models\User::findOne(Yii::$app->user->id);
+                        ?>
+                        <?=$user->username ?? 'gues'?>
+                    </span>
                     <img src="http://via.placeholder.com/64x64" class="wd-32 rounded-circle" alt="">
                     <span class="square-10 bg-success"></span>
                 </a>
@@ -646,8 +651,6 @@ AppAsset::register($this);
 
 <?php $this->endBody() ?>
 </body>
-<?php
-include 'checkSession.php'
-?>
+
 </html>
 <?php $this->endPage();

@@ -10,7 +10,7 @@ use yii\grid\GridView;
 /** @var frontend\models\FeedbackSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Feedbacks';
+$this->title = 'Moderation';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -19,9 +19,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="pd-30">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create Feedback', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 </div><!-- d-flex -->
 
 <div class="br-pagebody mg-t-5 pd-x-30">
@@ -34,8 +31,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
                 'columns' => [
-                    ['class' => 'yii\grid\SerialColumn'],
-
                     'id',
                     'name',
                     'email:email',
@@ -51,21 +46,42 @@ $this->params['breadcrumbs'][] = $this->title;
                             1 => 'Одобрено',
                             2 => 'Отклонено',
                         ],
-
                     ],
                     [
-                        'class' => ActionColumn::className(),
-                        'urlCreator' => function ($action, Feedback $model, $key, $index, $column) {
-                            return Url::toRoute([$action, 'id' => $model->id]);
-                        }
+                        'class' => 'yii\grid\ActionColumn',
+                        'template' => ' {approve} {reject} {pending}',
+                        'buttons' => [
+                            'approve' => function ($url, $model, $key) {
+                                return Html::a('<span class="glyphicon glyphicon-ok">Approve</span>', ['approve', 'id' => $model->id], [
+                                    'title' => 'Approve',
+                                    'class' => 'btn btn-success',
+                                    'data' => [
+                                        'confirm' => 'Are you sure you want to approve this comment?',
+                                        'method' => 'post',
+                                    ],
+                                ]);
+                            },
+                            'reject' => function ($url, $model, $key) {
+                                return Html::a('<span class="glyphicon glyphicon-remove">Reject</span>', ['reject', 'id' => $model->id], [
+                                    'title' => 'Reject',
+                                    'class' => 'btn btn-danger',
+                                    'data' => [
+                                        'confirm' => 'Are you sure you want to reject this comment?',
+                                        'method' => 'post',
+                                    ],
+                                ]);
+                            },
+                        ],
                     ],
                 ],
             ]); ?>
-            </div><!-- form-layout-footer -->
-        </div><!-- form-layout -->
+
+
+        </div><!-- form-layout-footer -->
+    </div><!-- form-layout -->
 
 
 
-    </div><!-- br-section-wrapper -->
+</div><!-- br-section-wrapper -->
 
 

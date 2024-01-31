@@ -37,11 +37,13 @@ class Feedback extends \yii\db\ActiveRecord
         return [
             [['name', 'email', 'phone', 'message', 'captcha'], 'required'],
             ['email', 'email'],
+            ['status', 'integer'],
             ['phone', 'match', 'pattern' => '/\+998\d{2}\d{3}\d{2}\d{2}/', 'message' => 'Telefon raqam formati mos emas'],
             ['message', 'filter', 'filter' => 'strip_tags'],
             [['captcha'], CaptchaValidator::className(), 'captchaAction' => 'site/captcha'],
         ];
     }
+
 
     /**
      * {@inheritdoc}
@@ -64,10 +66,8 @@ class Feedback extends \yii\db\ActiveRecord
         $this->message = HtmlPurifier::process($this->message);
         $this->created_at = time();
         $this->status = 0;
-        if ($this->save()) {
-            Yii::$app->session->setFlash('success', "User created successfully.");
-        } else {
-            Yii::$app->session->setFlash('error', "User not saved.");
+        if (!$this->save()) {
+           print_r($this->errors);
         }
         return true;
     }

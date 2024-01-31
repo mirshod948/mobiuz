@@ -42,7 +42,7 @@ class FeedbackController extends Controller
     public function actionIndex()
     {
         $searchModel = new FeedbackSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = $searchModel->searchAll($this->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -74,7 +74,10 @@ class FeedbackController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->usave()) {
+                Yii::$app->session->setFlash('success', "muvaffaqiyatli yaratilgan.");
                 return $this->redirect(['view', 'id' => $model->id]);
+            }else{
+                Yii::$app->session->setFlash('error', " not saved.");
             }
         } else {
             $model->loadDefaultValues();
@@ -114,11 +117,45 @@ class FeedbackController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    public function actionModeration()
+    {
+        $searchModel = new FeedbackSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        return $this->render('moderation', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+    public function actionApprove($id)
+    {
+        $comment = $this->findModel($id);
+        $comment->status = 1; // "одобрено" holati
+        $comment->save(false);
+
+        return $this->redirect(['moderation']);
+    }
+    public function actionReject($id)
+    {
+        $comment = $this->findModel($id);
+        $comment->status = 2; // "отклонено" holati
+        $comment->save(false);
+
+        return $this->redirect(['moderation']);
+    }
+    public function actionPending($id)
+    {
+        $comment = $this->findModel($id);
+        $comment->status = 0; // "на рассмотрении" (qarashda) holati
+        $comment->save(false);
+
+        return $this->redirect(['moderation']);
     }
 
     /**
